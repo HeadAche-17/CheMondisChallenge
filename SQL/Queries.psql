@@ -1,0 +1,35 @@
+-- Query 1
+-- How many events do we have per hour for user id 71?
+
+select DATE_TRUNC('hour', event_date) as hour, count(1) as count_per_hour from event where user_id=71 group by hour;
+
+
+-- Query 2
+-- What are the most popular browsers?
+
+select b.browser_name, count(1) as count_of_events from event e join browser b on e.browser_id = b.id group by b.browser_name order by count_of_events desc;
+
+-- Query 3
+-- Identify the most active categories between 1pm and 7pm
+
+select category_name, count(1) as count_of_categories  from event e join category c on e.category_id=c.id where EXTRACT(hour from event_date) between 13 and 19 group by category_name order by count_of_categories desc;
+
+-- Query 4
+-- What was the search volume for “term2” on Monday(s)
+
+select count(1) as volumne from event where EXTRACT(dow from event_date) = 1 and search_term = 'term2';
+
+-- Query 5
+-- What are the 10 most popular combinations of category, action and label?
+
+select category_name, action_name, label, count(*) as popularity from event e
+join category c on e.category_id = c.id
+join action a   on e.action_id = a.id
+join label l on e.label_id = l.id
+group by category_name, action_name, label
+ORDER BY popularity DESC limit 10;
+
+-- Query 6
+-- What was the first search term of each day?
+
+select DATE_TRUNC('day',event_date), search_term from event where event_date in (select MIN(event_date) from event group by DATE_TRUNC('day',event_date));
