@@ -1,6 +1,6 @@
 FROM openjdk:8
 
-# Never prompts the user for choices on installation/configuration of packages
+# Never prompts the user for choices on installation /configuration of packages
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
